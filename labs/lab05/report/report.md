@@ -161,6 +161,40 @@ header-includes:
 
 ![Изменение программы 1](image/15.png){#fig:015 width=70%}
 
+Ниже показан код программы:
+
+SECTION .data
+
+msg: DB 'Введите строку:',10
+msgLen: EQU $-msg
+
+SECTION .bss
+buf1: RESB 80
+
+SECTION .text
+
+GLOBAL _start
+
+_start:
+    mov     eax, 4
+    mov     ebx, 1
+    mov     ecx, msg
+    mov     edx, msgLen
+    int     80h
+    mov     eax, 3
+    mov     ebx, 0
+    mov     ecx, buf1
+    mov     edx, 80
+    int     80h
+    mov	    eax, 4
+    mov     ebx, 1
+    mov     ecx, buf1
+    mov     edx, buf1
+    int     80h
+    mov     eax, 1
+    mov     ebx, 0
+    int     80h
+
 3. Получаю исполняемый файл и проверяю его работу. (рис. [-@fig:016]).
 
 ![Проверка 1](image/16.png){#fig:016 width=70%}
@@ -176,6 +210,38 @@ header-includes:
 • вывести введённую строку на экран. (рис. [-@fig:018]).
 
 ![Изменение программы 2](image/18.png){#fig:018 width=70%}
+
+Ниже показан код программы:
+
+%include 'in_out.asm'
+
+SECTION .data
+
+msg: DB 'Введите строку: ', 0h
+msgLen: EQU $-msg
+
+SECTION .bss
+buf1: RESB 80
+
+SECTION .text
+	GLOBAL _start
+	_start:
+
+	mov eax, msg
+	call sprint
+
+	mov ecx, buf1
+	mov edx, 80
+
+	call sread
+
+	mov eax, 4
+	mov ebx, 1
+	mov ecx, buf1
+	int 80h
+
+	call quit
+
 
 6. Получаю исполняемый файл и проверяю его работу. (рис. [-@fig:019]).
 
